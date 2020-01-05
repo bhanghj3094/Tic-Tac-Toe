@@ -2,6 +2,44 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+class Test extends React.Component {
+  constructor(props) {
+    super(props);
+    // just like python __init__ function. Invoked when 
+    this.state = {
+      unused: 'haha',
+    }
+  }
+
+  // Mounting only invoked when creation
+  // componentWillMount = () => {
+  //   console.log("[Test] componentWillMount invoked")
+  // }
+  
+  componentDidMount = () => {
+    console.log("[Test] componentDidMount invoked")
+  } // called after initial render
+
+  // also invoked when props change, not invoked on first props
+  // componentWillReceiveProps = () => {
+  //   console.log("[Test] componentWillReceiveProps invoked")
+  // }
+
+  // invoked when state or props change .. or more??
+  componentDidUpdate = (props, state) => {
+    console.log("[Test] componentDidUpdate invoked")
+  }
+
+  render() {
+    console.log("[Test] Rendering invoked")
+    return (
+      <div>
+        {this.props.greetings}
+      </div>
+    );
+  }
+}
+
 function Square(props) {
   return (
     <button className="square" onClick={props.onClick}>
@@ -52,6 +90,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      greetings: 'hello',
     };
   }
 
@@ -79,7 +118,12 @@ class Game extends React.Component {
     });
   }
 
+  componentDidUpdate = () => {
+    console.log("[Game] componentDidUpdate invoked")
+  }
+
   render() {
+    console.log("[Game] Render")
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
@@ -104,6 +148,8 @@ class Game extends React.Component {
 
     return (
       <div className="game">
+        <Test greetings={this.state.greetings}/>
+        <button onClick={() => this.setState({greetings: '안녕'})}>click to change props</button>
         <div className="game-board">
           <Board
             squares={current.squares}
